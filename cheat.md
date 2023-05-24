@@ -39,7 +39,7 @@ Open new terminal :)
 
 ### Enable useful plugins
 
-Set plugin in ```~/.zshrc```
+Add following plugins in ```~/.zshrc```
 
 ```bash
 plugins=(
@@ -56,7 +56,7 @@ plugins=(
 )
 ```
 
-You will need to install missing plugins like :
+You may have to install some missing plugins like :
 
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
 - [zsh-nvm](https://github.com/lukechilds/zsh-nvm)
@@ -67,6 +67,8 @@ Install fzf (better search for command history)
 [Install fzf with homebrew](https://github.com/junegunn/fzf#using-homebrew-or-linuxbrew)
 
 ## NVM (node version manager)
+
+### Install
 
 [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm)
 
@@ -83,11 +85,11 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 ```
 
---
+### Auto use
 
 [https://github.com/nvm-sh/nvm#zsh](https://github.com/nvm-sh/nvm#zsh)
 
-Calling nvm use automatically in a directory with a .nvmrc file
+Calling `nvm use` automatically in a directory having a `.nvmrc` file
 
 Add the following lines in your `~/.zshrc`
 
@@ -115,7 +117,7 @@ add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 ```
 
---
+### Usage
 
 [https://github.com/nvm-sh/nvm#usage](https://github.com/nvm-sh/nvm#usage)
 
@@ -125,46 +127,49 @@ To download, compile, and install the latest release of node :
 nvm install node
 ```
 
-___
-
-## Command
-
-```bash
-dscl . -list /Users UniqueID
-id username
-```
-
-## Web
-
-What listen to port 80 ?
-
-```bash
-sudo lsof -i :80
-```
-
 ## Git
 
-### config
+### Config
+
+#### Global config
 
 ```bash
+# create a global gitignore file for all your git project, init with .DS_Store
 echo .DS_Store >> ~/.gitignore_global
 
+# add the file to your git config
 git config --global core.excludesfile ~/.gitignore_global
 
+# set your name
 git config --global user.name "Your Name"
 
+# set your email
 git config --global user.email you@email.com
 
+# activate color ui
 git config --global color.ui true
+```
 
-# Local repository config
+#### Local config
+
+```bash
 cd [PATH_TO_REPOSITORY]
 git config user.name "user name"
 ```
 
-### Reset Git to a specific commit
+### Use VSCode as visual editor
 
-- En local :
+Open VSCode > Cmd + Shift + P > Shell Command: Install 'code' command in PATH
+
+```bash
+git config --global -e
+```
+
+Add `editor = code --wait` in the `[core]` section.
+
+### Reset a branch to a specific commit
+
+- Local env
 
 ```bash
 git reset --hard 00f7918
@@ -175,7 +180,7 @@ git push --force origin develop
 git diff develop..origin/develop
 ```
 
-- Sur test, si le reset n'est pas pris en compte :
+- If reset is not set on other env
 
 ```bash
 git reset --hard origin/develop
@@ -184,7 +189,7 @@ git reset --hard origin/develop
 ### Push branch on origin
 
 ```bash
-git push origin mabranche
+git push origin <mabranche>
 ```
 
 ### Remove branch from remote and locally
@@ -219,6 +224,38 @@ git xargs git branch -d
 git pull --rebase --autostash
 ```
 
+### Edit specific commit (after feedback for example)
+
+- interactive rebase
+
+```bash
+git rebase -i <commit_hash> # with alias : grbi 973487
+```
+
+set to "edit" (or "e") the commit you want to edit
+Update the code and ammend the commit
+Then continue rebase
+
+```bash
+git commit --ammend --no-edit # with alias : gcn!
+git rebase --continue # with alias : grbc
+```
+
+- commit fixup
+
+Edit your code then fixup specific commit
+
+```bash
+git commit --fixup 9ac993c9587343564fa7abb1a9402a95243a6fd9
+```
+
+Then you can rebase on a previous commit and squash the fixup
+
+```bash
+git rebase -i --autosquash <commit_hash> 
+```
+
+```bash
 ### Useful
 
 ```bash
@@ -228,6 +265,83 @@ git commit -m "[DOC-0000] mon message"
 git merge --no-ff mabranche -m "[DOC-0000] merge branche mabranche into develop"
 ```
 
+[Git push options](https://docs.gitlab.com/ee/user/project/push_options.html)
+
+## VSCode
+
+Open File : `cmd + p`
+
+Run command : `cmd + shift + p`
+
+- `reload window`
+- `restart TS server`
+
+Recommended extensions :
+
+- [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [SonarLint](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode)
+- [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
+- [Live Share](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare)
+- [Project Manager](https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager)
+- [Markdown lint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
+- [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+
 ## AWS
 
-[AWS login Unify (with Okta)](https://login.unifygroup.com/app/UserHome)
+### Cloudwatch Insights
+
+Filter logs
+
+  ```text
+  fields @timestamp, @message
+  | sort @timestamp desc
+  | filter @message like "my message"
+  | limit 20
+  ```
+
+Check all logs associated to a request id
+
+  ```text
+  fields @timestamp, @message
+  | sort @timestamp desc
+  | filter @requestId like "BAwvMhZtjoEEP2w="
+  | limit 20
+  ```
+
+### SSO example
+
+```text
+############ ~/.aws/config : SSO Login Configuration ############
+[profile profile-name]
+sso_start_url = https://xxx.awsapps.com/start
+sso_region = eu-west-1
+sso_account_id = xxx
+sso_role_name = XxxRoleName
+region = eu-west-1
+output = json
+```
+
+```bash
+# sso login
+aws sso login --profile profile-name
+
+# s3 copy example
+aws s3 cp s3://my-super-bucket/folder/subfolder/ ./ --profile production-uno --recursive
+```
+
+## Useful bash commands
+
+- User info
+
+```bash
+dscl . -list /Users UniqueID
+id username
+```
+
+- What listen to port 80 ?
+
+```bash
+sudo lsof -i :80
+```
