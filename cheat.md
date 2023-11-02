@@ -37,6 +37,26 @@ Set ```ZSH_THEME="powerlevel10k/powerlevel10k"``` in ```~/.zshrc```.
 
 Open new terminal :)
 
+#### How to update Powerlevel10k
+
+```bash
+# Navigate to the Powerlevel10k directory
+cd ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# Update from GitHub
+git pull 
+```
+
+After updating, you may want to run `p10k configure` to see if there are new configuration options available.
+
+#### Visual Studio Code Terminal Integration
+
+I like to use the VS Code Terminal integration but initially the prompt provided by Powerlevel10k contained some broken characters. This is the custom font causing issues again, but its easy to fix.
+
+- On Mac: press ⌘ , or click Code → Preferences → Settings.
+- Enter terminal.integrated.fontFamily in the search box at the top of Settings tab and set the value below to `MesloLGS NF`.
+- Restart VS Code and you are good.
+
 ### Enable useful plugins
 
 Add following plugins in ```~/.zshrc```
